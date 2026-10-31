@@ -15,5 +15,7 @@ let package = Package(
       swiftSettings: [.swiftLanguageMode(.v5)]
     ),
     .testTarget(name: "ElsewhereSoundDSPTests", dependencies: ["ElsewhereSoundDSP"]),
+    // アプリ側のうち、画面や Core Audio を動かさずに確かめられる部分（アップデートの確認の版の比べ方など）
+    .testTarget(name: "ElsewhereSoundTests", dependencies: ["ElsewhereSound"]),
   ]
 )

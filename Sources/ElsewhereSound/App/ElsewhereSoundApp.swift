@@ -19,10 +19,12 @@ enum Main {
 struct ElsewhereSoundApp: App {
   @NSApplicationDelegateAdaptor private var delegate: AppDelegate
   @StateObject private var controller = AudioController()
+  /// パネルを閉じても確認の結果が残るよう、アプリ全体で 1 つ持つ
+  @StateObject private var updates = UpdateChecker()
 
   var body: some Scene {
     MenuBarExtra {
-      ControlPanel(controller: controller)
+      ControlPanel(controller: controller, updates: updates)
     } label: {
       Image(systemName: controller.isOn ? controller.preset.symbol : "hifispeaker")
     }

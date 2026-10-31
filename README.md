@@ -17,6 +17,8 @@ macOS 15 以降（Apple シリコン・Intel のどちらでも）。
 
 3. メニューバーのパネルでオンにして、「システムオーディオ録音」の許可を求められたら許可する
 
+新しい版が出たかは、パネルの「アップデートを確認」で調べられる。押したときだけ GitHub（`api.github.com`）に最新のリリースを問い合わせ、自動では問い合わせない。新しい版があればパネルに知らせて、ダウンロードページを開く。上の 1・2 と同じ手順で入れ替える。
+
 ## ビルドと実行
 
 ```bash
@@ -89,7 +91,8 @@ open --env ELSEWHERE_LOG_LEVELS=1 --stdout /tmp/elsewhere-sound.log "build/Elsew
 |---|---|
 | `Sources/ElsewhereSoundDSP/` | 音の加工。部品はフィルタ（`Biquad`）、コンプレッサー・歪み・乱数（`Dynamics`）、分割畳み込み（`Convolver`）、部屋のインパルス応答（`RoomImpulse`）、回転むら・パチパチ（`Texture`）。プリセットごとの加工は `Effects`（一覧）と、響く場所（`RoomEffects`）・ラジオと電話（`RadioEffects`）・古い録音（`RecordingEffects`）。プリセットの一覧と切り替え・混ぜ合わせは `Processor`（画面とオーディオスレッドの受け渡しは Atomic だけ） |
 | `Sources/ElsewhereSound/Audio/` | Process Tap と集約デバイス（`SystemAudioTap`）、Core Audio のプロパティ読み取り（`CoreAudioProperty`）、画面との橋渡し（`AudioController`） |
-| `Sources/ElsewhereSound/App/` | 入口とメニューバー、起動時にパネルを開く（`ElsewhereSoundApp`）、操作パネル（`ControlPanel`）、ファイル変換（`FileRenderer`） |
+| `Sources/ElsewhereSound/App/` | 入口とメニューバー、起動時にパネルを開く（`ElsewhereSoundApp`）、操作パネル（`ControlPanel`）、アップデートの確認（`UpdateChecker`）、ファイル変換（`FileRenderer`） |
 | `Resources/AppIcon.icon` | アプリのアイコン（ヘッドホンと音の波形。Icon Composer で開ける） |
 | `Sources/ElsewhereSound/Debug/` | 操作パネルの撮影（`--snapshot`。DEBUG ビルドだけ） |
+| `Tests/ElsewhereSoundTests/` | アップデートの確認の版の比べ方と、GitHub の返事の読み取り |
 | `Tests/ElsewhereSoundDSPTests/` | 畳み込みが直接計算と一致すること、各プリセットの帯域・残響の長さ・やまびこ・切り替え時の段差、回転むらとパチパチの部品、NaN や無限大が来ても立ち直ることなど |

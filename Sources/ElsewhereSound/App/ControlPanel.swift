@@ -53,6 +53,7 @@ extension Preset {
 /// メニューバーのアイコンを押すと開くパネル
 struct ControlPanel: View {
   @ObservedObject var controller: AudioController
+  @ObservedObject var updates: UpdateChecker
 
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
@@ -107,10 +108,24 @@ struct ControlPanel: View {
       }
 
       Divider()
+      Text(controller.isOn ? "Mac から出る音すべてに効果をかけています" : "オフ：元の音のまま")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+      if let message = updates.message {
+        VStack(alignment: .leading, spacing: 4) {
+          Text(message)
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+          if case .available = updates.state {
+            Button("ダウンロードページをもう一度開く") { updates.openDownloadPage() }
+              .buttonStyle(.link)
+          }
+        }
+        .font(.caption)
+      }
       HStack {
-        Text(controller.isOn ? "Mac から出る音すべてに効果をかけています" : "オフ：元の音のまま")
-          .font(.caption)
-          .foregroundStyle(.secondary)
+        Button("アップデートを確認") { updates.check() }
+          .disabled(updates.state == .checking)
         Spacer()
         Button("終了") { NSApplication.shared.terminate(nil) }
       }

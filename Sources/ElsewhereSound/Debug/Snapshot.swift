@@ -20,7 +20,10 @@ enum Snapshot {
       let controller = AudioController(autoStart: false)
       controller.preset = preset
       let suffix = appearance == .aqua ? "light" : "dark"
-      render(ControlPanel(controller: controller), appearance: appearance, to: directory.appending(path: "panel-\(suffix).png"))
+      // ダークの方には、新しい版を見つけたときの表示も出しておく
+      let updates = UpdateChecker(currentVersion: "0.1.0", open: { _ in })
+      if appearance == .darkAqua { updates.preview(.available(version: "0.2.0", page: UpdateChecker.releasesPage)) }
+      render(ControlPanel(controller: controller, updates: updates), appearance: appearance, to: directory.appending(path: "panel-\(suffix).png"))
     }
     UserDefaults.standard.set(savedPreset, forKey: "preset")
     exit(0)
