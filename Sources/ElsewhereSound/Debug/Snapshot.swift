@@ -14,16 +14,21 @@ enum Snapshot {
     try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     NSApplication.shared.setActivationPolicy(.accessory)
 
-    // 音声は動かさない。保存済みの設定も書き換えないよう、終わったら元に戻す
+    // 音声は動かさない。保存済みの設定も書き換えないよう、終わったら元に戻す。
+    // light と dark は README のスクリーンショット（効果をかけている最中の表示）、update は新しい版を見つけたときの表示
     let savedPreset = UserDefaults.standard.object(forKey: "preset")
-    for (preset, appearance) in [(Preset.hall, NSAppearance.Name.aqua), (.cassette, .darkAqua)] {
+    let shots: [(name: String, preset: Preset, appearance: NSAppearance.Name, update: Bool)] = [
+      ("light", .hall, .aqua, false), ("dark", .vinyl, .darkAqua, false), ("update", .hall, .darkAqua, true),
+    ]
+    for shot in shots {
       let controller = AudioController(autoStart: false)
-      controller.preset = preset
-      let suffix = appearance == .aqua ? "light" : "dark"
-      // ダークの方には、新しい版を見つけたときの表示も出しておく
+      controller.preset = shot.preset
+      controller.previewRunning(input: 0.72, output: 0.78)
       let updates = UpdateChecker(currentVersion: "0.1.0", open: { _ in })
-      if appearance == .darkAqua { updates.preview(.available(version: "0.2.0", page: UpdateChecker.releasesPage)) }
-      render(ControlPanel(controller: controller, updates: updates), appearance: appearance, to: directory.appending(path: "panel-\(suffix).png"))
+      if shot.update { updates.preview(.available(version: "0.2.0", page: UpdateChecker.releasesPage)) }
+      render(
+        ControlPanel(controller: controller, updates: updates), appearance: shot.appearance,
+        to: directory.appending(path: "panel-\(shot.name).png"))
     }
     UserDefaults.standard.set(savedPreset, forKey: "preset")
     exit(0)

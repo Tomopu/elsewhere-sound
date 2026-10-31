@@ -73,6 +73,15 @@ final class AudioController: ObservableObject {
     }
   }
 
+  #if DEBUG
+    /// 開発用：パネルの撮影で、効果をかけている最中の表示を出す（音声は動かさず、設定も書き換えない）
+    func previewRunning(input: Double, output: Double) {
+      isOn = true
+      inputLevel = input
+      outputLevel = output
+    }
+  #endif
+
   private func startMeter() {
     meterTimer?.invalidate()
     let interval = 1.0 / 15

@@ -18,8 +18,8 @@ final class UpdateChecker: ObservableObject {
   let currentVersion: String
   private let open: (URL) -> Void
 
-  nonisolated static let latestReleaseURL = URL(string: "https://api.github.com/repos/Tomopu/ElsewhereSound/releases/latest")!
-  nonisolated static let releasesPage = URL(string: "https://github.com/Tomopu/ElsewhereSound/releases")!
+  nonisolated static let latestReleaseURL = URL(string: "https://api.github.com/repos/Tomopu/elsewhere-sound/releases/latest")!
+  nonisolated static let releasesPage = URL(string: "https://github.com/Tomopu/elsewhere-sound/releases")!
 
   init(
     currentVersion: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0",

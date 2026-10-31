@@ -17,10 +17,10 @@ struct UpdateCheckerTests {
 
   @Test("GitHub の最新リリースの JSON から、v を除いた版とページを取り出す")
   func parsesRelease() throws {
-    let json = #"{"tag_name": "v0.2.0", "html_url": "https://github.com/Tomopu/ElsewhereSound/releases/tag/v0.2.0", "draft": false}"#
+    let json = #"{"tag_name": "v0.2.0", "html_url": "https://github.com/Tomopu/elsewhere-sound/releases/tag/v0.2.0", "draft": false}"#
     let release = try UpdateChecker.parseRelease(Data(json.utf8))
     #expect(release.version == "0.2.0")
-    #expect(release.page.absoluteString == "https://github.com/Tomopu/ElsewhereSound/releases/tag/v0.2.0")
+    #expect(release.page.absoluteString == "https://github.com/Tomopu/elsewhere-sound/releases/tag/v0.2.0")
   }
 
   @Test("形の違う返事は、読めなかったという失敗にする")
